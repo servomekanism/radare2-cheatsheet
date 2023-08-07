@@ -4,7 +4,7 @@ Radare2
 =======
 
 #### radare2 
-
+```
 ?                       : help
 ? 0x6262616a            : prints whatever 0x6262616a can mean, e.g. "jabb"
 ? 0x10 + 6              : calculates and converts to various numbering systems etc
@@ -127,7 +127,7 @@ afi.                    : from the current location, get the current function th
 s `afi.`                : seek to the start of the function that this location belongs to
 s @ `afi.`              : get the address of the start of the function that this location belongs to without seeking to it
 s @ `afi. @ 0x080491a5` : get the address of the start of the function that location 0x080491a5 belongs to
-
+```
 
 ### Cheatsheet? 
 
