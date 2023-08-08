@@ -8,6 +8,7 @@ Radare2
 ?                       : help
 ? 0x6262616a            : prints whatever 0x6262616a can mean, e.g. "jabb"
 ? 0x10 + 6              : calculates and converts to various numbering systems etc
+?X 0xd88 - 0x300        : only prints the hex of the calculation
 ?v sym.imp.func_name    : Get address of func_name@PLT e.g. ?v sym.main
 
 s?                      : help regarding seek command
@@ -66,6 +67,9 @@ i~nx                    : check if compiled with NX
 #### searching
 
 e search.*              : Edit searching configuration
+e??search               : list search variables
+e search.in=?           : lists various locations
+e search.in=dbg.maps.rx : is a good location to search in for gadgets
 /?                      : List search subcommands
 / string                : Search string in memory/binary
 /R [?]                  : Search for ROP gadgets
@@ -115,9 +119,12 @@ wx 90 @0x8000ffff       : write the 0x90 (nop) at the specific location and over
 wa jmp 0x08048641 @loc  : write assembly jmp location at memory location (need to be writable with: r2 -w filename.bin)
 e io.cache=1            : set so that the write is being done only in memory and not on the file
 
-dm                      : Show memory maps
-dmm                     : List modules (libraries, binaries loaded in memory)
+dm                      : Show memory maps (libc won't show until we get into main, or the program entry point)
+dm.                     : Show map name and permissions etc, for current address
+dm=                     : Show memory maps using ASCII-art bars
+dmm                     : List modules (libraries, binaries loaded in memory), libc wont show before getting into entry point
 dmi [addr|libn] [symna] : List symbols of target lib
+dmi libc system         : find the address of system() in the loaded libc
 
 ragg2 (outside)         : creates a De Brujin Sequence, cyclic/unique pattern.
 ragg2 -P 100 -r         : creates a cyclic pattern of 100 bytes printed as raw bytes
@@ -127,6 +134,9 @@ afi.                    : from the current location, get the current function th
 s `afi.`                : seek to the start of the function that this location belongs to
 s @ `afi.`              : get the address of the start of the function that this location belongs to without seeking to it
 s @ `afi. @ 0x080491a5` : get the address of the start of the function that location 0x080491a5 belongs to
+
+pxq 32 @0x7fffea360288  : hexdump of 32 bytes @location
+pxq 32 @rsp             : hexdump of 32 bytes @rsp
 ```
 
 ### Cheatsheet? 
@@ -174,4 +184,5 @@ Strings equivalent, extract strings from binary:
 rabin2 -zz data.bin
 
 rabin2 -zz data.bin | grep =wide - this can be used to extract wide characters that are unprintable:w
+
 
